@@ -14,6 +14,7 @@ Arnaout functional prototype on the [Adafruit ESP32-S3 Reverse TFT Feather](http
 <!-- contents markdown begin -->
 
 1. [License](#license)
+1. [See Also](#see-also)
 
 <!-- contents markdown end -->
 <p/>
@@ -33,6 +34,13 @@ The entire contents of this repo, including this `README.md`, are copyrighted an
     - See [`./CHANGE_LICENSE`](./CHANGE_LICENSE) for a copy of the MIT license.
 
 See the [`./LICENSE`](./LICENSE) file for more information.
+
+## See Also
+Here are some links I found helpful.
+- Adafruit
+    - [Adafruit ESP32-S3 Reverse TFT Feather](https://www.adafruit.com/product/5691)
+
+Adafruit invests time and resources providing open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
 
 ***
 > **_Legal Notice_**  
