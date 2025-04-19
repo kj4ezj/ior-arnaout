@@ -13,4 +13,8 @@ The entire contents of this repo, including this `README.md`, are copyrighted an
 
 See the [`./LICENSE`](./LICENSE) file for more information.
 
+***
+> **_Legal Notice_**  
+> This repo contains assets created in collaboration with a large language model, machine learning algorithm, or weak artificial intelligence (AI). This notice is required in some countries.
+
 Copyright © 2025 Zach Butler
