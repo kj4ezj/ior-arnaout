@@ -54,13 +54,13 @@ This is an Arduino-compatible board.
 
 ## Flashing
 Plug the board into your computer and open the Arduino IDE. Then:
-1. Verify the correct board is set.
+1. Verify the correct board is set.  
     Tools > Board > esp32 > Adafruit Feather ESP32-S3 Reverse TFT
-1. Verify the correct port is set.
+1. Verify the correct port is set.  
     Tools > Port > `/dev/ttyACM0`, or whatever serial port your board was assigned.
-1. Enter download mode.
+1. Enter download mode.  
     Hold down the `D0` button on the board, press the `Reset` button, then release `D0`.
-1. Program the board.
+1. Program the board.  
     You can hit the right arrow button in the top-left of the Arduino IDE, or use Sketch > Upload.
 
 The board [will](https://github.com/espressif/arduino-esp32/issues/6762) reset automatically running the new code.
