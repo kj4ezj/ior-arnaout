@@ -16,6 +16,7 @@ Arnaout functional prototype on the [Adafruit ESP32-S3 Reverse TFT Feather](http
 <p/>
 <!-- contents markdown begin -->
 
+1. [Prerequisites](#prerequisites)
 1. [License](#license)
 1. [See Also](#see-also)
 
@@ -25,6 +26,13 @@ Arnaout functional prototype on the [Adafruit ESP32-S3 Reverse TFT Feather](http
 </tr>
 </table>
 <!-- contents box end -->
+
+## Prerequisites
+Your Linux user account must be in the `dialout` user group to flash the board over the virtual serial port. If you are not already, add yourself to this group...
+```bash
+sudo usermod -a -G dialout $USER
+```
+...then restart for the changes to take effect.
 
 ## License
 The entire contents of this repo, including this `README.md`, are copyrighted and released under the Business Source License version 1.1 (BUSL) with the following license parameters:
