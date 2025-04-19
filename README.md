@@ -2,7 +2,8 @@
 Arnaout functional prototype on the [Adafruit ESP32-S3 Reverse TFT Feather](https://www.adafruit.com/product/5691).
 
 > [!CAUTION]
-> This project is copyrighted and released under the Business Source License v1.1 (BUSL). See [`./LICENSE`](./LICENSE) for terms.
+> This project is copyrighted and released under the Business Source License v1.1 (BUSL).
+> See [`./LICENSE`](./LICENSE) for terms.
 
 <!-- contents box begin -->
 <table>
