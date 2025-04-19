@@ -17,6 +17,7 @@ Arnaout functional prototype on the [Adafruit ESP32-S3 Reverse TFT Feather](http
 <!-- contents markdown begin -->
 
 1. [Prerequisites](#prerequisites)
+1. [Setup](#setup)
 1. [License](#license)
 1. [See Also](#see-also)
 
@@ -33,6 +34,21 @@ Your Linux user account must be in the `dialout` user group to flash the board o
 sudo usermod -a -G dialout $USER
 ```
 ...then restart for the changes to take effect.
+
+## Setup
+This is an Arduino-compatible board.
+1. Install the [Arduino IDEv2](https://github.com/arduino/arduino-ide).
+    ```bash
+    flatpak install -y cc.arduino.IDE2
+    ```
+1. Add the ESP32-S3 board support package (BSP).
+    1. Arduino IDEv2 > Tools > Board > Board Manager.
+    1. Search "esp32".
+    1. Install `esp32` by Espressif Systems.
+1. Add the Adafruit ST7789 library for the display.
+    1. Arduino IDEv2 > Tools > Manage Libraries...
+    1. Search "Adafruit_ST7789".
+    1. Install `Adafruit ST7735 and ST7789` by Adafruit.
 
 ## License
 The entire contents of this repo, including this `README.md`, are copyrighted and released under the Business Source License version 1.1 (BUSL) with the following license parameters:
