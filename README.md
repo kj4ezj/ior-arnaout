@@ -11,6 +11,6 @@ The entire contents of this repo, including this `README.md`, are copyrighted an
     - MIT is GPLv2- and GPLv3-compatible.
     - See [`./CHANGE_LICENSE`](./CHANGE_LICENSE) for a copy of the MIT license.
 
-See the [./LICENSE](./LICENSE) file for more information.
+See the [`./LICENSE`](./LICENSE) file for more information.
 
 Copyright © 2025 Zach Butler
