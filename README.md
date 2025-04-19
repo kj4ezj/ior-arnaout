@@ -1,6 +1,27 @@
 # Arnaout
 Arnaout functional prototype on the [Adafruit ESP32-S3 Reverse TFT Feather](https://www.adafruit.com/product/5691).
 
+<!-- contents box begin -->
+<table>
+<tr/>
+<tr>
+<td>
+<p/>
+<div align="center">
+<b>Contents</b>
+</div>
+<p/>
+<!-- contents markdown begin -->
+
+1. [License](#license)
+
+<!-- contents markdown end -->
+<p/>
+</td>
+</tr>
+</table>
+<!-- contents box end -->
+
 ## License
 The entire contents of this repo, including this `README.md`, are copyrighted and released under the Business Source License version 1.1 (BUSL) with the following license parameters:
 - Additional Use Grant: None.
