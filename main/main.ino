@@ -17,6 +17,8 @@ void setup(void) {
     // turn on LCD backlight
     pinMode(TFT_BACKLITE, OUTPUT);
     digitalWrite(TFT_BACKLITE, HIGH);
+    pinMode(TFT_I2C_POWER, OUTPUT);
+    digitalWrite(TFT_I2C_POWER, HIGH);
     delay(10);
 
     // initialize ST7789 240x135 TFT LCD display
