@@ -29,9 +29,9 @@ void setup(void) {
     display.setCursor(15, 10);
     display.setTextColor(ST77XX_BLUE);
     display.setTextSize(6);
-    display.println("400");
-    display.setCursor(130, 38);
-    display.setTextSize(2);
+    display.println("12400");
+    display.setCursor(200, 31);
+    display.setTextSize(3);
     display.println("mL");
 }
 
