@@ -87,6 +87,8 @@ Here are some links I found helpful.
     - [Adafruit ST7735 and ST7789 Library](https://github.com/adafruit/Adafruit-ST7735-Library) on GitHub
     - [Guide](https://learn.adafruit.com/esp32-s3-reverse-tft-feather)
     - [Store Page](https://www.adafruit.com/product/5691)
+- Arduino
+    - [Arduino IDEv2](https://github.com/arduino/arduino-ide)
 
 Adafruit invests time and resources providing open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
 
