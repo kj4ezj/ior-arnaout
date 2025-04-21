@@ -89,6 +89,9 @@ Here are some links I found helpful.
     - [Store Page](https://www.adafruit.com/product/5691)
 - Arduino
     - [Arduino IDEv2](https://github.com/arduino/arduino-ide)
+- Thingverse
+    1. [Tiny Tester](https://www.thingiverse.com/thing:2253091) - a fast test print
+    2. [All-In-One 3D Printer Test](https://www.thingiverse.com/thing:2975429) - micro
 
 Adafruit invests time and resources providing open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
 
