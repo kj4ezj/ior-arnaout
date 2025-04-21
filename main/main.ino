@@ -10,9 +10,16 @@
 
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
+uint16_t intake = 0;
+
 void setup(void) {
     Serial.begin(9600);
     Serial.print(F("Hello, world!"));
+
+    // init buttons
+    pinMode(0, INPUT_PULLUP);
+    pinMode(1, INPUT_PULLDOWN);
+    pinMode(2, INPUT_PULLDOWN);
 
     // turn on LCD backlight
     pinMode(TFT_BACKLITE, OUTPUT);
@@ -27,16 +34,40 @@ void setup(void) {
     display.setTextWrap(false);
     display.fillScreen(ST77XX_BLACK);
 
-    // print example text
+    // print intake
     display.setCursor(15, 10);
     display.setTextColor(ST77XX_BLUE);
     display.setTextSize(6);
-    display.println("12400");
+    display.printf("%5u", intake);
     display.setCursor(200, 31);
     display.setTextSize(3);
     display.println("mL");
 }
 
 void loop() {
-    delay(1000);
+    bool write = false;
+    if (!digitalRead(0)) {
+        intake = 0;
+        write = true;
+    } else if (digitalRead(1)) {
+        intake += 5;
+        write = true;
+    } else if (digitalRead(2)) {
+        write = true;
+        if (intake > 4) intake -= 5;
+        else if (intake > 0) intake = 0;
+        else write = false;
+    }
+    if (write == true) {
+        // print intake
+        display.fillScreen(ST77XX_BLACK);
+        display.setCursor(15, 10);
+        display.setTextColor(ST77XX_BLUE);
+        display.setTextSize(6);
+        display.printf("%5u", intake);
+        display.setCursor(200, 31);
+        display.setTextSize(3);
+        display.println("mL");
+    }
+    delay(150);
 }
