@@ -10,7 +10,10 @@
 
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
+uint16_t failures = 0;
 uint16_t intake = 0;
+uint16_t output = 0;
+uint8_t position = 0;
 
 void setup(void) {
     Serial.begin(9600);
@@ -32,6 +35,11 @@ void setup(void) {
     display.init(135, 240);
     display.setRotation(3);
     display.setTextWrap(false);
+
+    update();
+}
+
+void update() {
     display.fillScreen(ST77XX_BLACK);
 
     // print intake
@@ -42,6 +50,21 @@ void setup(void) {
     display.setCursor(200, 31);
     display.setTextSize(3);
     display.println("mL");
+
+    // print output
+    display.setCursor(15, 60);
+    display.setTextColor(ST77XX_YELLOW);
+    display.setTextSize(6);
+    display.printf("%5u", output);
+    display.setCursor(200, 81);
+    display.setTextSize(3);
+    display.println("mL");
+
+    // print failures
+    display.setCursor(15, 115);
+    display.setTextColor(ST77XX_RED);
+    display.setTextSize(2);
+    display.printf("%u missed", failures);
 }
 
 void loop() {
@@ -58,16 +81,6 @@ void loop() {
         else if (intake > 0) intake = 0;
         else write = false;
     }
-    if (write == true) {
-        // print intake
-        display.fillScreen(ST77XX_BLACK);
-        display.setCursor(15, 10);
-        display.setTextColor(ST77XX_BLUE);
-        display.setTextSize(6);
-        display.printf("%5u", intake);
-        display.setCursor(200, 31);
-        display.setTextSize(3);
-        display.println("mL");
-    }
+    if (write == true) update();
     delay(150);
 }
