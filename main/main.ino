@@ -9,24 +9,30 @@
 #include <SPI.h>
 
 class Button {
+    private:
+        uint8_t _pin;
+        uint16_t _shiftReg;
+        bool _state;
+
     public:
-        Button(uint8_t pin) : _pin(pin), _state(0) {
+        Button(uint8_t pin) : _pin(pin), _shiftReg(0), _state(false) {
             pinMode(_pin, INPUT_PULLDOWN);
         }
 
         bool isPressed() {
-            _state = (_state << 1) | digitalRead(_pin);
-            return (_state == 0x8000);
+            _shiftReg = (_shiftReg << 1) | digitalRead(_pin);
+            if (_shiftReg == 0xFFFF && !_state) {
+                return _state = true;
+            } else if (_shiftReg == 0x0000 && _state) {
+                _state = false;
+            }
+            return false;
         }
-
-    private:
-        uint8_t _pin;
-        uint16_t _state;
 };
 
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
-uint16_t failures = 0;
+uint16_t failures = 1;
 uint16_t intake = 0;
 uint16_t output = 0;
 uint8_t position = 0;
