@@ -8,21 +8,49 @@
 #include <Adafruit_ST7789.h> // display driver
 #include <SPI.h>
 
+class Button {
+    public:
+        Button(uint8_t pin) : _pin(pin), _state(0) {
+            pinMode(_pin, INPUT_PULLDOWN);
+        }
+
+        bool isPressed() {
+            int value = digitalRead(_pin);
+            _state = (_state << 1) | value | 0xE000;
+            if (_pin == 1) {
+                if (value) Serial.print(F("HIGH"));
+                else Serial.print(F(" LOW"));
+                Serial.print(F(" -- _state = "));
+                Serial.print(_state, BIN);
+                if (_state == 0xF000) Serial.println(F(" PRESS event!"));
+                else Serial.println(F(" ..."));
+            }
+            return (_state == 0xF000);
+        }
+
+    private:
+        uint8_t _pin;
+        uint16_t _state;
+};
+
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 uint16_t failures = 0;
 uint16_t intake = 0;
 uint16_t output = 0;
 uint8_t position = 0;
+Button* swAdd;
+Button* swSub;
 
 void setup(void) {
     Serial.begin(9600);
+    delay(1000);
     Serial.print(F("Hello, world!"));
 
     // init buttons
     pinMode(0, INPUT_PULLUP);
-    pinMode(1, INPUT_PULLDOWN);
-    pinMode(2, INPUT_PULLDOWN);
+    swAdd = new Button(1);
+    swSub = new Button(2);
 
     // turn on LCD backlight
     pinMode(TFT_BACKLITE, OUTPUT);
@@ -72,15 +100,15 @@ void loop() {
     if (!digitalRead(0)) {
         intake = 0;
         write = true;
-    } else if (digitalRead(1)) {
+    } else if (swAdd->isPressed()) {
         intake += 5;
         write = true;
-    } else if (digitalRead(2)) {
+    } else if (swSub->isPressed()) {
         write = true;
         if (intake > 4) intake -= 5;
         else if (intake > 0) intake = 0;
         else write = false;
     }
     if (write == true) update();
-    delay(150);
+    delayMicroseconds(249950);
 }
