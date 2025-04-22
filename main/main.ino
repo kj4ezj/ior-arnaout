@@ -15,8 +15,8 @@ class Button {
         }
 
         bool isPressed() {
-            _state = (_state << 1) | digitalRead(_pin) | 0xE000;
-            return (_state == 0xF000);
+            _state = (_state << 1) | digitalRead(_pin);
+            return (_state == 0x8000);
         }
 
     private:
@@ -100,5 +100,5 @@ void loop() {
         else write = false;
     }
     if (write == true) update();
-    delayMicroseconds(950);
+    delayMicroseconds(1000);
 }
