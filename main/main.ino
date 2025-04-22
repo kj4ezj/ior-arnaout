@@ -12,19 +12,21 @@ class Button {
     private:
         uint8_t _pin;
         uint16_t _shiftReg;
-        bool _state;
+        unsigned long _state;
 
     public:
-        Button(uint8_t pin) : _pin(pin), _shiftReg(0), _state(false) {
+        Button(uint8_t pin) : _pin(pin), _shiftReg(0), _state(0) {
             pinMode(_pin, INPUT_PULLDOWN);
         }
 
         bool isPressed() {
             _shiftReg = (_shiftReg << 1) | digitalRead(_pin);
-            if (_shiftReg == 0xFFFF && !_state) {
-                return _state = true;
-            } else if (_shiftReg == 0x0000 && _state) {
-                _state = false;
+            if (!_state && _shiftReg == 0xFFFF) {
+                return _state = millis() + 400;
+            } else if (_state && _shiftReg == 0x0000) {
+                _state = 0;
+            } else if (_state && _state + 100 < millis()) {
+                return _state = millis();
             }
             return false;
         }
@@ -32,7 +34,7 @@ class Button {
 
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
-uint16_t failures = 1;
+uint16_t failures = 2;
 uint16_t intake = 0;
 uint16_t output = 0;
 uint8_t position = 0;
