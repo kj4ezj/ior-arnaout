@@ -61,11 +61,6 @@ void setup(void) {
     display.init(135, 240);
     display.setRotation(3);
     display.setTextWrap(false);
-
-    update();
-}
-
-void update() {
     display.fillScreen(ST77XX_BLACK);
 
     // print intake
@@ -91,6 +86,14 @@ void update() {
     display.setTextColor(ST77XX_RED);
     display.setTextSize(2);
     display.printf("%u missed", failures);
+}
+
+void update() {
+    // print intake
+    display.setCursor(15, 10);
+    display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
+    display.setTextSize(6);
+    display.printf("%5u", intake);
 }
 
 void loop() {
