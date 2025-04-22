@@ -15,16 +15,7 @@ class Button {
         }
 
         bool isPressed() {
-            int value = digitalRead(_pin);
-            _state = (_state << 1) | value | 0xE000;
-            if (_pin == 1) {
-                if (value) Serial.print(F("HIGH"));
-                else Serial.print(F(" LOW"));
-                Serial.print(F(" -- _state = "));
-                Serial.print(_state, BIN);
-                if (_state == 0xF000) Serial.println(F(" PRESS event!"));
-                else Serial.println(F(" ..."));
-            }
+            _state = (_state << 1) | digitalRead(_pin) | 0xE000;
             return (_state == 0xF000);
         }
 
@@ -44,7 +35,6 @@ Button* swSub;
 
 void setup(void) {
     Serial.begin(9600);
-    delay(1000);
     Serial.print(F("Hello, world!"));
 
     // init buttons
@@ -110,5 +100,5 @@ void loop() {
         else write = false;
     }
     if (write == true) update();
-    delayMicroseconds(249950);
+    delayMicroseconds(950);
 }
