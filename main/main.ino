@@ -36,7 +36,6 @@ Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 uint16_t failures = 2;
 uint16_t milliliters = 0;
-uint16_t output = 0;
 uint8_t position = 0;
 Button* swAdd;
 Button* swSub;
@@ -69,15 +68,6 @@ void setup(void) {
     display.setTextSize(6);
     display.printf("%5u", milliliters);
     display.setCursor(200, 31);
-    display.setTextSize(3);
-    display.println("mL");
-
-    // print output
-    display.setCursor(15, 60);
-    display.setTextColor(ST77XX_YELLOW);
-    display.setTextSize(6);
-    display.printf("%5u", output);
-    display.setCursor(200, 81);
     display.setTextSize(3);
     display.println("mL");
 
