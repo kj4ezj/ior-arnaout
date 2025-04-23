@@ -8,6 +8,11 @@
 #include <Adafruit_ST7789.h> // display driver
 #include <SPI.h>
 
+#define INTAKE_MODE 0
+#define OUTPUT_MODE 1
+
+uint8_t deviceMode = INTAKE_MODE;
+
 class Button {
     private:
         uint8_t _pin;
@@ -49,6 +54,17 @@ void setup(void) {
     swAdd = new Button(1);
     swSub = new Button(2);
 
+    const unsigned long BOOT_DELAY = millis() + 32;
+    while (millis() < BOOT_DELAY) {
+        if (swAdd->isPressed()) {
+            deviceMode = INTAKE_MODE;
+            break;
+        } else if (swSub->isPressed()) {
+            deviceMode = OUTPUT_MODE;
+            break;
+        }
+    }
+
     // turn on LCD backlight
     pinMode(TFT_BACKLITE, OUTPUT);
     digitalWrite(TFT_BACKLITE, HIGH);
@@ -64,7 +80,11 @@ void setup(void) {
 
     // print measurement
     display.setCursor(15, 10);
-    display.setTextColor(ST77XX_BLUE);
+    if (deviceMode == INTAKE_MODE) {
+        display.setTextColor(ST77XX_BLUE);
+    } else {
+        display.setTextColor(ST77XX_YELLOW);
+    }
     display.setTextSize(6);
     display.printf("%5u", milliliters);
     display.setCursor(200, 31);
@@ -75,13 +95,21 @@ void setup(void) {
     display.setCursor(15, 115);
     display.setTextColor(ST77XX_RED);
     display.setTextSize(2);
-    display.printf("%u missed", failures);
+    if (deviceMode == INTAKE_MODE) {
+        display.printf("Inc. %u times.", failures);
+    } else {
+        display.printf("Unmeasured %u times.", failures);
+    }
 }
 
 void update() {
     // print measurement
     display.setCursor(15, 10);
-    display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
+    if (deviceMode == INTAKE_MODE) {
+        display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
+    } else {
+        display.setTextColor(ST77XX_YELLOW, ST77XX_BLACK);
+    }
     display.setTextSize(6);
     display.printf("%5u", milliliters);
 }
