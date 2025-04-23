@@ -35,7 +35,7 @@ class Button {
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 uint16_t failures = 2;
-uint16_t intake = 0;
+uint16_t milliliters = 0;
 uint16_t output = 0;
 uint8_t position = 0;
 Button* swAdd;
@@ -63,11 +63,11 @@ void setup(void) {
     display.setTextWrap(false);
     display.fillScreen(ST77XX_BLACK);
 
-    // print intake
+    // print measurement
     display.setCursor(15, 10);
     display.setTextColor(ST77XX_BLUE);
     display.setTextSize(6);
-    display.printf("%5u", intake);
+    display.printf("%5u", milliliters);
     display.setCursor(200, 31);
     display.setTextSize(3);
     display.println("mL");
@@ -89,25 +89,25 @@ void setup(void) {
 }
 
 void update() {
-    // print intake
+    // print measurement
     display.setCursor(15, 10);
     display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
     display.setTextSize(6);
-    display.printf("%5u", intake);
+    display.printf("%5u", milliliters);
 }
 
 void loop() {
     bool write = false;
     if (!digitalRead(0)) {
-        intake = 0;
+        milliliters = 0;
         write = true;
     } else if (swAdd->isPressed()) {
-        intake += 5;
+        milliliters += 5;
         write = true;
     } else if (swSub->isPressed()) {
         write = true;
-        if (intake > 4) intake -= 5;
-        else if (intake > 0) intake = 0;
+        if (milliliters > 4) milliliters -= 5;
+        else if (milliliters > 0) milliliters = 0;
         else write = false;
     }
     if (write == true) update();
