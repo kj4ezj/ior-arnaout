@@ -35,6 +35,11 @@ class Button {
             }
             return false;
         }
+
+        bool isReleased() {
+            isPressed();
+            return (_state == 0);
+        }
 };
 
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
@@ -78,8 +83,31 @@ void setup(void) {
     display.setTextWrap(false);
     display.fillScreen(ST77XX_BLACK);
 
+    // wait for button release after mode switch
+    if (!(swAdd->isReleased() && swSub->isReleased())) {
+        display.setTextColor(ST77XX_GREEN);
+        display.setTextSize(3);
+        display.setCursor(10, 0);
+        display.print(F("Mode set:"));
+        display.setCursor(80, 55);
+        if (deviceMode == INTAKE_MODE) {
+            display.setTextColor(ST77XX_BLUE);
+            display.print(F("Intake"));
+        } else {
+            display.setTextColor(ST77XX_YELLOW);
+            display.print(F("Output"));
+        }
+        display.setCursor(80, 110);
+        display.setTextColor(ST77XX_RED);
+        display.print(F("Let go..."));
+        while (!(swAdd->isReleased() && swSub->isReleased())) {
+            delayMicroseconds(1000);
+        }
+        display.fillScreen(ST77XX_BLACK);
+    }
+
     // print measurement
-    display.setCursor(15, 10);
+    display.setCursor(15, 30);
     if (deviceMode == INTAKE_MODE) {
         display.setTextColor(ST77XX_BLUE);
     } else {
@@ -87,7 +115,7 @@ void setup(void) {
     }
     display.setTextSize(6);
     display.printf("%5u", milliliters);
-    display.setCursor(200, 31);
+    display.setCursor(200, 51);
     display.setTextSize(3);
     display.println("mL");
 
@@ -104,7 +132,7 @@ void setup(void) {
 
 void update() {
     // print measurement
-    display.setCursor(15, 10);
+    display.setCursor(15, 30);
     if (deviceMode == INTAKE_MODE) {
         display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
     } else {
