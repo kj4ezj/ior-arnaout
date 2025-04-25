@@ -137,6 +137,10 @@ void setup(void) {
     display.setTextSize(3);
     display.println("mL");
 
+    printFailures();
+}
+
+void printFailures() {
     // print failures
     display.setCursor(15, 115);
     display.setTextColor(ST77XX_RED);
