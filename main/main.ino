@@ -11,6 +11,8 @@
 #define INTAKE_MODE 0
 #define OUTPUT_MODE 1
 
+#define PIN_E1_ADD 5
+#define PIN_E1_SUB 6
 #define PIN_ONBOARD_RST 0
 #define PIN_ONBOARD_ADD 1
 #define PIN_ONBOARD_SUB 2
@@ -52,6 +54,8 @@ Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 uint16_t failures = 2;
 uint16_t milliliters = 0;
 uint8_t position = 0;
+Button* swE1Add;
+Button* swE1Sub;
 Button* swOnboardAdd;
 Button* swOnboardSub;
 Button* swRst;
@@ -62,6 +66,8 @@ void setup(void) {
 
     // init buttons
     pinMode(PIN_ONBOARD_RST, INPUT_PULLUP);
+    swE1Add = new Button(PIN_E1_ADD);
+    swE1Sub = new Button(PIN_E1_SUB);
     swOnboardAdd = new Button(PIN_ONBOARD_ADD);
     swOnboardSub = new Button(PIN_ONBOARD_SUB);
     swRst = new Button(PIN_RST);
@@ -151,7 +157,14 @@ void update() {
 
 void loop() {
     bool write = false;
-    if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
+    if (swE1Add->isPressed()) {
+        milliliters += 1;
+        write = true;
+    } else if (swE1Sub->isPressed()) {
+        write = true;
+        if (milliliters > 0) milliliters -= 1;
+        else write = false;
+    } else if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
         milliliters = 0;
         write = true;
     } else if (swOnboardAdd->isPressed()) {
