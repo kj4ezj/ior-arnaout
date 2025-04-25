@@ -132,14 +132,7 @@ void setup(void) {
     }
 
     // print measurement
-    display.setCursor(15, 30);
-    if (deviceMode == INTAKE_MODE) {
-        display.setTextColor(ST77XX_BLUE);
-    } else {
-        display.setTextColor(ST77XX_YELLOW);
-    }
-    display.setTextSize(6);
-    display.printf("%5u", milliliters);
+    printFluids();
     display.setCursor(200, 51);
     display.setTextSize(3);
     display.println("mL");
@@ -155,7 +148,7 @@ void setup(void) {
     }
 }
 
-void update() {
+void printFluids() {
     // print measurement
     display.setCursor(15, 30);
     if (deviceMode == INTAKE_MODE) {
@@ -204,6 +197,6 @@ void loop() {
         else if (milliliters > 0) milliliters = 0;
         else write = false;
     }
-    if (write == true) update();
+    if (write == true) printFluids();
     delayMicroseconds(1000);
 }
