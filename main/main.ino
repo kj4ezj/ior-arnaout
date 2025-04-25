@@ -14,6 +14,7 @@
 #define PIN_ONBOARD_RST 0
 #define PIN_ONBOARD_ADD 1
 #define PIN_ONBOARD_SUB 2
+#define PIN_RST 15
 
 uint8_t deviceMode = INTAKE_MODE;
 
@@ -52,6 +53,7 @@ uint16_t failures = 2;
 uint16_t milliliters = 0;
 uint8_t position = 0;
 Button* swAdd;
+Button* swRst;
 Button* swSub;
 
 void setup(void) {
@@ -61,6 +63,7 @@ void setup(void) {
     // init buttons
     pinMode(PIN_ONBOARD_RST, INPUT_PULLUP);
     swAdd = new Button(PIN_ONBOARD_ADD);
+    swRst = new Button(PIN_RST);
     swSub = new Button(PIN_ONBOARD_SUB);
 
     const unsigned long BOOT_DELAY = millis() + 32;
@@ -148,7 +151,7 @@ void update() {
 
 void loop() {
     bool write = false;
-    if (!digitalRead(PIN_ONBOARD_RST)) {
+    if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
         milliliters = 0;
         write = true;
     } else if (swAdd->isPressed()) {
