@@ -11,6 +11,8 @@
 #define INTAKE_MODE 0
 #define OUTPUT_MODE 1
 
+#define PIN_ONBOARD_RST 0
+
 uint8_t deviceMode = INTAKE_MODE;
 
 class Button {
@@ -55,7 +57,7 @@ void setup(void) {
     Serial.print(F("Hello, world!"));
 
     // init buttons
-    pinMode(0, INPUT_PULLUP);
+    pinMode(PIN_ONBOARD_RST, INPUT_PULLUP);
     swAdd = new Button(1);
     swSub = new Button(2);
 
@@ -144,7 +146,7 @@ void update() {
 
 void loop() {
     bool write = false;
-    if (!digitalRead(0)) {
+    if (!digitalRead(PIN_ONBOARD_RST)) {
         milliliters = 0;
         write = true;
     } else if (swAdd->isPressed()) {
