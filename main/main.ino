@@ -12,6 +12,7 @@
 #define OUTPUT_MODE 1
 
 #define PIN_ONBOARD_RST 0
+#define PIN_ONBOARD_ADD 1
 
 uint8_t deviceMode = INTAKE_MODE;
 
@@ -58,7 +59,7 @@ void setup(void) {
 
     // init buttons
     pinMode(PIN_ONBOARD_RST, INPUT_PULLUP);
-    swAdd = new Button(1);
+    swAdd = new Button(PIN_ONBOARD_ADD);
     swSub = new Button(2);
 
     const unsigned long BOOT_DELAY = millis() + 32;
