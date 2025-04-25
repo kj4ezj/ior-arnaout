@@ -56,7 +56,7 @@ class Button {
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
 uint16_t failures = 2;
-uint16_t milliliters = 0;
+uint32_t milliliters = 0;
 uint8_t position = 0;
 Button* swE1Add;
 Button* swE1Sub;
