@@ -52,9 +52,9 @@ Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 uint16_t failures = 2;
 uint16_t milliliters = 0;
 uint8_t position = 0;
-Button* swAdd;
+Button* swOnboardAdd;
+Button* swOnboardSub;
 Button* swRst;
-Button* swSub;
 
 void setup(void) {
     Serial.begin(9600);
@@ -62,16 +62,16 @@ void setup(void) {
 
     // init buttons
     pinMode(PIN_ONBOARD_RST, INPUT_PULLUP);
-    swAdd = new Button(PIN_ONBOARD_ADD);
+    swOnboardAdd = new Button(PIN_ONBOARD_ADD);
+    swOnboardSub = new Button(PIN_ONBOARD_SUB);
     swRst = new Button(PIN_RST);
-    swSub = new Button(PIN_ONBOARD_SUB);
 
     const unsigned long BOOT_DELAY = millis() + 32;
     while (millis() < BOOT_DELAY) {
-        if (swAdd->isPressed()) {
+        if (swOnboardAdd->isPressed()) {
             deviceMode = INTAKE_MODE;
             break;
-        } else if (swSub->isPressed()) {
+        } else if (swOnboardSub->isPressed()) {
             deviceMode = OUTPUT_MODE;
             break;
         }
@@ -91,7 +91,7 @@ void setup(void) {
     display.fillScreen(ST77XX_BLACK);
 
     // wait for button release after mode switch
-    if (!(swAdd->isReleased() && swSub->isReleased())) {
+    if (!(swOnboardAdd->isReleased() && swOnboardSub->isReleased())) {
         display.setTextColor(ST77XX_GREEN);
         display.setTextSize(3);
         display.setCursor(10, 0);
@@ -107,7 +107,7 @@ void setup(void) {
         display.setCursor(80, 110);
         display.setTextColor(ST77XX_RED);
         display.print(F("Let go..."));
-        while (!(swAdd->isReleased() && swSub->isReleased())) {
+        while (!(swOnboardAdd->isReleased() && swOnboardSub->isReleased())) {
             delayMicroseconds(1000);
         }
         display.fillScreen(ST77XX_BLACK);
@@ -154,10 +154,10 @@ void loop() {
     if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
         milliliters = 0;
         write = true;
-    } else if (swAdd->isPressed()) {
+    } else if (swOnboardAdd->isPressed()) {
         milliliters += 5;
         write = true;
-    } else if (swSub->isPressed()) {
+    } else if (swOnboardSub->isPressed()) {
         write = true;
         if (milliliters > 4) milliliters -= 5;
         else if (milliliters > 0) milliliters = 0;
