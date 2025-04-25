@@ -15,6 +15,8 @@
 #define PIN_E1_SUB 6
 #define PIN_E2_ADD 9
 #define PIN_E2_SUB 10
+#define PIN_E3_ADD 11
+#define PIN_E3_SUB 12
 #define PIN_ONBOARD_RST 0
 #define PIN_ONBOARD_ADD 1
 #define PIN_ONBOARD_SUB 2
@@ -60,6 +62,8 @@ Button* swE1Add;
 Button* swE1Sub;
 Button* swE2Add;
 Button* swE2Sub;
+Button* swE3Add;
+Button* swE3Sub;
 Button* swOnboardAdd;
 Button* swOnboardSub;
 Button* swRst;
@@ -74,6 +78,8 @@ void setup(void) {
     swE1Sub = new Button(PIN_E1_SUB);
     swE2Add = new Button(PIN_E2_ADD);
     swE2Sub = new Button(PIN_E2_SUB);
+    swE3Add = new Button(PIN_E3_ADD);
+    swE3Sub = new Button(PIN_E3_SUB);
     swOnboardAdd = new Button(PIN_ONBOARD_ADD);
     swOnboardSub = new Button(PIN_ONBOARD_SUB);
     swRst = new Button(PIN_RST);
@@ -176,6 +182,14 @@ void loop() {
     } else if (swE2Sub->isPressed()) {
         write = true;
         if (milliliters > 9) milliliters -= 10;
+        else if (milliliters > 0) milliliters = 0;
+        else write = false;
+    } else if (swE3Add->isPressed()) {
+        milliliters += 100;
+        write = true;
+    } else if (swE3Sub->isPressed()) {
+        write = true;
+        if (milliliters > 99) milliliters -= 100;
         else if (milliliters > 0) milliliters = 0;
         else write = false;
     } else if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
