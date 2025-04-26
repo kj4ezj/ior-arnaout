@@ -165,42 +165,42 @@ void printFluids() {
 }
 
 void loop() {
-    bool write = false;
+    bool writeFluids = false;
     if (swE1Add->isPressed()) {
         milliliters += 1;
-        write = true;
+        writeFluids = true;
     } else if (swE1Sub->isPressed()) {
-        write = true;
+        writeFluids = true;
         if (milliliters > 0) milliliters -= 1;
-        else write = false;
+        else writeFluids = false;
     } else if (swE2Add->isPressed()) {
         milliliters += 10;
-        write = true;
+        writeFluids = true;
     } else if (swE2Sub->isPressed()) {
-        write = true;
+        writeFluids = true;
         if (milliliters > 9) milliliters -= 10;
         else if (milliliters > 0) milliliters = 0;
-        else write = false;
+        else writeFluids = false;
     } else if (swE3Add->isPressed()) {
         milliliters += 100;
-        write = true;
+        writeFluids = true;
     } else if (swE3Sub->isPressed()) {
-        write = true;
+        writeFluids = true;
         if (milliliters > 99) milliliters -= 100;
         else if (milliliters > 0) milliliters = 0;
-        else write = false;
+        else writeFluids = false;
     } else if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
         milliliters = 0;
-        write = true;
+        writeFluids = true;
     } else if (swOnboardAdd->isPressed()) {
         milliliters += 5;
-        write = true;
+        writeFluids = true;
     } else if (swOnboardSub->isPressed()) {
-        write = true;
+        writeFluids = true;
         if (milliliters > 4) milliliters -= 5;
         else if (milliliters > 0) milliliters = 0;
-        else write = false;
+        else writeFluids = false;
     }
-    if (write == true) printFluids();
+    if (writeFluids == true) printFluids();
     delayMicroseconds(1000);
 }
