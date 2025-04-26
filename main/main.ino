@@ -17,6 +17,8 @@
 #define PIN_E2_SUB 10
 #define PIN_E3_ADD 11
 #define PIN_E3_SUB 12
+#define PIN_FAIL_ADD 17
+#define PIN_FAIL_SUB 18
 #define PIN_ONBOARD_RST 0
 #define PIN_ONBOARD_ADD 1
 #define PIN_ONBOARD_SUB 2
@@ -55,7 +57,7 @@ class Button {
 
 Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 
-uint16_t failures = 2;
+uint16_t failures = 0;
 uint32_t milliliters = 0;
 uint8_t position = 0;
 Button* swE1Add;
@@ -64,6 +66,8 @@ Button* swE2Add;
 Button* swE2Sub;
 Button* swE3Add;
 Button* swE3Sub;
+Button* swFailAdd;
+Button* swFailSub;
 Button* swOnboardAdd;
 Button* swOnboardSub;
 Button* swRst;
@@ -80,6 +84,8 @@ void setup(void) {
     swE2Sub = new Button(PIN_E2_SUB);
     swE3Add = new Button(PIN_E3_ADD);
     swE3Sub = new Button(PIN_E3_SUB);
+    swFailAdd = new Button(PIN_FAIL_ADD);
+    swFailSub = new Button(PIN_FAIL_SUB);
     swOnboardAdd = new Button(PIN_ONBOARD_ADD);
     swOnboardSub = new Button(PIN_ONBOARD_SUB);
     swRst = new Button(PIN_RST);
@@ -137,19 +143,29 @@ void setup(void) {
     display.setTextSize(3);
     display.println("mL");
 
+    // print failures
+    display.setCursor(15, 115);
+    display.setTextColor(ST77XX_RED);
+    display.setTextSize(2);
+    display.print(F("Times "));
+    if (deviceMode == INTAKE_MODE) {
+        display.printf(F("inct:"));
+    } else {
+        display.printf(F("missed:"));
+    }
     printFailures();
 }
 
 void printFailures() {
     // print failures
-    display.setCursor(15, 115);
-    display.setTextColor(ST77XX_RED);
+    display.setTextColor(ST77XX_RED, ST77XX_BLACK);
     display.setTextSize(2);
     if (deviceMode == INTAKE_MODE) {
-        display.printf("Inc. %u times.", failures);
+        display.setCursor(159, 115);
     } else {
-        display.printf("Unmeasured %u times.", failures);
+        display.setCursor(183, 115);
     }
+    display.printf("%u", failures);
 }
 
 void printFluids() {
@@ -165,6 +181,7 @@ void printFluids() {
 }
 
 void loop() {
+    bool writeFailures = false;
     bool writeFluids = false;
     if (swE1Add->isPressed()) {
         milliliters += 1;
@@ -189,8 +206,17 @@ void loop() {
         if (milliliters > 99) milliliters -= 100;
         else if (milliliters > 0) milliliters = 0;
         else writeFluids = false;
+    } else if (swFailAdd->isPressed()) {
+        failures += 1;
+        writeFailures = true;
+    } else if (swFailSub->isPressed()) {
+        writeFailures = true;
+        if (failures > 0) failures -= 1;
+        else writeFailures = false;
     } else if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
+        failures = 0;
         milliliters = 0;
+        writeFailures = true;
         writeFluids = true;
     } else if (swOnboardAdd->isPressed()) {
         milliliters += 5;
@@ -202,5 +228,6 @@ void loop() {
         else writeFluids = false;
     }
     if (writeFluids == true) printFluids();
+    if (writeFailures == true) printFailures();
     delayMicroseconds(1000);
 }
