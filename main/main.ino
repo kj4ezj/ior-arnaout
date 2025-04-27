@@ -19,10 +19,12 @@
 #define PIN_E3_SUB 12
 #define PIN_FAIL_ADD 17
 #define PIN_FAIL_SUB 18
+#define PIN_LOCK 14
 #define PIN_ONBOARD_RST 0
 #define PIN_ONBOARD_ADD 1
 #define PIN_ONBOARD_SUB 2
 #define PIN_RST 15
+#define PIN_UNLOCK 8
 
 uint8_t deviceMode = INTAKE_MODE;
 
@@ -68,9 +70,11 @@ Button* swE3Add;
 Button* swE3Sub;
 Button* swFailAdd;
 Button* swFailSub;
+Button* swLock;
 Button* swOnboardAdd;
 Button* swOnboardSub;
 Button* swRst;
+Button* swUnlock;
 
 void setup(void) {
     Serial.begin(9600);
@@ -86,9 +90,11 @@ void setup(void) {
     swE3Sub = new Button(PIN_E3_SUB);
     swFailAdd = new Button(PIN_FAIL_ADD);
     swFailSub = new Button(PIN_FAIL_SUB);
+    swLock = new Button(PIN_LOCK);
     swOnboardAdd = new Button(PIN_ONBOARD_ADD);
     swOnboardSub = new Button(PIN_ONBOARD_SUB);
     swRst = new Button(PIN_RST);
+    swUnlock = new Button(PIN_UNLOCK);
 
     const unsigned long BOOT_DELAY = millis() + 32;
     while (millis() < BOOT_DELAY) {
@@ -213,6 +219,8 @@ void loop() {
         writeFailures = true;
         if (failures > 0) failures -= 1;
         else writeFailures = false;
+    } else if (swLock->isPressed()) {
+        while (!swUnlock->isPressed()) delayMicroseconds(1000);
     } else if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
         failures = 0;
         milliliters = 0;
