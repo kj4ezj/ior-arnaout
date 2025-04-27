@@ -186,50 +186,89 @@ void printFluids() {
     display.printf("%5u", milliliters);
 }
 
+uint32_t readAllButtons() {
+    uint32_t buttons = 0;
+    buttons = (buttons << 1) | swUnlock->isPressed();
+
+    buttons = (buttons << 1) | swRst->isPressed();
+    buttons = (buttons << 1) | swOnboardSub->isPressed();
+    buttons = (buttons << 1) | swOnboardAdd->isPressed();
+    buttons = (buttons << 1) | swLock->isPressed();
+
+    buttons = (buttons << 1) | swFailSub->isPressed();
+    buttons = (buttons << 1) | swFailAdd->isPressed();
+    buttons = (buttons << 1) | swE3Sub->isPressed();
+    buttons = (buttons << 1) | swE3Add->isPressed();
+
+    buttons = (buttons << 1) | swE2Sub->isPressed();
+    buttons = (buttons << 1) | swE2Add->isPressed();
+    buttons = (buttons << 1) | swE1Sub->isPressed();
+    buttons = (buttons << 1) | swE1Add->isPressed();
+    return buttons;
+}
+
+#define E1_ADD 0x0001
+#define E1_SUB 0x0002
+#define E2_ADD 0x0004
+#define E2_SUB 0x0008
+
+#define E3_ADD 0x0010
+#define E3_SUB 0x0020
+#define FAIL_ADD 0x0040
+#define FAIL_SUB 0x0080
+
+#define LOCK 0x0100
+#define ONBOARD_ADD 0x0200
+#define ONBOARD_SUB 0x0400
+#define RST 0x0800
+
+#define UNLOCK 0x1000
+
 void loop() {
+    uint32_t buttons = readAllButtons();
     bool writeFailures = false;
     bool writeFluids = false;
-    if (swE1Add->isPressed()) {
+    if (E1_ADD & buttons) {
         milliliters += 1;
         writeFluids = true;
-    } else if (swE1Sub->isPressed()) {
+    } else if (E1_SUB & buttons) {
         writeFluids = true;
         if (milliliters > 0) milliliters -= 1;
         else writeFluids = false;
-    } else if (swE2Add->isPressed()) {
+    } else if (E2_ADD & buttons) {
         milliliters += 10;
         writeFluids = true;
-    } else if (swE2Sub->isPressed()) {
+    } else if (E2_SUB & buttons) {
         writeFluids = true;
         if (milliliters > 9) milliliters -= 10;
         else if (milliliters > 0) milliliters = 0;
         else writeFluids = false;
-    } else if (swE3Add->isPressed()) {
+    } else if (E3_ADD & buttons) {
         milliliters += 100;
         writeFluids = true;
-    } else if (swE3Sub->isPressed()) {
+    } else if (E3_SUB & buttons) {
         writeFluids = true;
         if (milliliters > 99) milliliters -= 100;
         else if (milliliters > 0) milliliters = 0;
         else writeFluids = false;
-    } else if (swFailAdd->isPressed()) {
+    } else if (FAIL_ADD & buttons) {
         failures += 1;
         writeFailures = true;
-    } else if (swFailSub->isPressed()) {
+    } else if (FAIL_SUB & buttons) {
         writeFailures = true;
         if (failures > 0) failures -= 1;
         else writeFailures = false;
-    } else if (swLock->isPressed()) {
+    } else if (LOCK & buttons) {
         while (!swUnlock->isPressed()) delayMicroseconds(1000);
-    } else if (!digitalRead(PIN_ONBOARD_RST) || swRst->isPressed()) {
+    } else if (RST & buttons || !digitalRead(PIN_ONBOARD_RST)) {
         failures = 0;
         milliliters = 0;
         writeFailures = true;
         writeFluids = true;
-    } else if (swOnboardAdd->isPressed()) {
+    } else if (ONBOARD_ADD & buttons) {
         milliliters += 5;
         writeFluids = true;
-    } else if (swOnboardSub->isPressed()) {
+    } else if (ONBOARD_SUB & buttons) {
         writeFluids = true;
         if (milliliters > 4) milliliters -= 5;
         else if (milliliters > 0) milliliters = 0;
