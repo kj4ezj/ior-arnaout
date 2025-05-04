@@ -145,7 +145,7 @@ void setup(void) {
 
     // print measurement
     printFluids();
-    display.setCursor(200, 51);
+    display.setCursor(200, 26);
     display.setTextSize(3);
     display.println("mL");
 
@@ -176,7 +176,7 @@ void printFailures() {
 
 void printFluids() {
     // print measurement
-    display.setCursor(15, 30);
+    display.setCursor(15, 5);
     if (deviceMode == INTAKE_MODE) {
         display.setTextColor(ST77XX_BLUE, ST77XX_BLACK);
     } else {
