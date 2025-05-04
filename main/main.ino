@@ -284,6 +284,11 @@ void loop() {
         if (failures > 0) failures -= 1;
         else writeFailures = false;
     } else if (LOCK & buttons) {
+        if (change) {
+            change = 0;
+            changeTime = 0;
+            printChange();
+        }
         while (!swUnlock->isPressed()) delayMicroseconds(1000);
     } else if (RST & buttons || !digitalRead(PIN_ONBOARD_RST)) {
         change = 0;
