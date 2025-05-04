@@ -62,6 +62,7 @@ Adafruit_ST7789 display = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 uint32_t change = 0;
 unsigned long changeTime = 0;
 uint16_t failures = 0;
+bool locked = false;
 uint32_t milliliters = 0;
 uint8_t position = 0;
 Button* swE1Add;
@@ -250,65 +251,73 @@ uint32_t readAllButtons() {
 
 void loop() {
     uint32_t buttons = readAllButtons();
-    bool writeChange = false;
-    bool writeFailures = false;
-    bool writeFluids = false;
-    if (E1_ADD & buttons) {
-        change += 1;
-        writeChange = true;
-    } else if (E1_SUB & buttons) {
-        writeChange = true;
-        if (change > 0) change -= 1;
-        else writeChange = false;
-    } else if (E2_ADD & buttons) {
-        change += 10;
-        writeChange = true;
-    } else if (E2_SUB & buttons) {
-        writeChange = true;
-        if (change > 9) change -= 10;
-        else if (change > 0) change = 0;
-        else writeChange = false;
-    } else if (E3_ADD & buttons) {
-        change += 100;
-        writeChange = true;
-    } else if (E3_SUB & buttons) {
-        writeChange = true;
-        if (change > 99) change -= 100;
-        else if (change > 0) change = 0;
-        else writeChange = false;
-    } else if (FAIL_ADD & buttons) {
-        failures += 1;
-        writeFailures = true;
-    } else if (FAIL_SUB & buttons) {
-        writeFailures = true;
-        if (failures > 0) failures -= 1;
-        else writeFailures = false;
-    } else if (LOCK & buttons) {
-        if (change) {
+    if (locked) {
+        if (UNLOCK & buttons) {
+            display.drawRect(0, 0, 240, 135, ST77XX_BLACK);
+            locked = false;
+        }
+    } else if (buttons) {
+        bool writeChange = false;
+        bool writeFailures = false;
+        bool writeFluids = false;
+        if (E1_ADD & buttons) {
+            change += 1;
+            writeChange = true;
+        } else if (E1_SUB & buttons) {
+            writeChange = true;
+            if (change > 0) change -= 1;
+            else writeChange = false;
+        } else if (E2_ADD & buttons) {
+            change += 10;
+            writeChange = true;
+        } else if (E2_SUB & buttons) {
+            writeChange = true;
+            if (change > 9) change -= 10;
+            else if (change > 0) change = 0;
+            else writeChange = false;
+        } else if (E3_ADD & buttons) {
+            change += 100;
+            writeChange = true;
+        } else if (E3_SUB & buttons) {
+            writeChange = true;
+            if (change > 99) change -= 100;
+            else if (change > 0) change = 0;
+            else writeChange = false;
+        } else if (FAIL_ADD & buttons) {
+            failures += 1;
+            writeFailures = true;
+        } else if (FAIL_SUB & buttons) {
+            writeFailures = true;
+            if (failures > 0) failures -= 1;
+            else writeFailures = false;
+        } else if (LOCK & buttons) {
+            if (change) {
+                change = 0;
+                changeTime = 0;
+                printChange();
+            }
+            display.drawRect(0, 0, 240, 135, ST77XX_RED);
+            locked = true;
+        } else if (RST & buttons || !digitalRead(PIN_ONBOARD_RST)) {
             change = 0;
             changeTime = 0;
-            printChange();
+            failures = 0;
+            milliliters = 0;
+            writeChange = true;
+            writeFailures = true;
+            writeFluids = true;
+        } else if (ONBOARD_ADD & buttons) {
+            milliliters += 5;
+            writeChange = true;
+        } else if (ONBOARD_SUB & buttons) {
+            writeChange = true;
+            if (milliliters > 4) milliliters -= 5;
+            else if (milliliters > 0) milliliters = 0;
+            else writeChange = false;
         }
-        while (!swUnlock->isPressed()) delayMicroseconds(1000);
-    } else if (RST & buttons || !digitalRead(PIN_ONBOARD_RST)) {
-        change = 0;
-        changeTime = 0;
-        failures = 0;
-        milliliters = 0;
-        writeChange = true;
-        writeFailures = true;
-        writeFluids = true;
-    } else if (ONBOARD_ADD & buttons) {
-        milliliters += 5;
-        writeChange = true;
-    } else if (ONBOARD_SUB & buttons) {
-        writeChange = true;
-        if (milliliters > 4) milliliters -= 5;
-        else if (milliliters > 0) milliliters = 0;
-        else writeChange = false;
+        if (writeChange == true) printChange();
+        if (writeFluids == true) printFluids();
+        if (writeFailures == true) printFailures();
     }
-    if (writeChange == true) printChange();
-    if (writeFluids == true) printFluids();
-    if (writeFailures == true) printFailures();
     delayMicroseconds(1000);
 }
