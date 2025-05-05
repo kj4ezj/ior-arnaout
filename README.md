@@ -50,10 +50,14 @@ This is an Arduino-compatible board.
     1. Arduino IDEv2 > Tools > Board > Board Manager.
     1. Search "esp32".
     1. Install `esp32` by Espressif Systems.
-1. Add the Adafruit ST7789 library for the display.
+1. Add the Adafruit ST7789 library for the little display.
     1. Arduino IDEv2 > Tools > Manage Libraries...
     1. Search "Adafruit_ST7789".
-    1. Install `Adafruit ST7735 and ST7789` by Adafruit.
+    1. Install `Adafruit ST7735 and ST7789` by Adafruit with dependencies.
+1. Add the Adafruit RA8875 for the big display.
+    1. Arduino IDEv2 > Tools > Manage Libraries...
+    1. Search "RA8875".
+    1. Install `Adafruit RA8875` by Adafruit with dependencies.
 
 ## Flashing
 Plug the board into your computer and open the Arduino IDE. Then:
@@ -87,6 +91,8 @@ Here are some links I found helpful.
     - [Adafruit ST7735 and ST7789 Library](https://github.com/adafruit/Adafruit-ST7735-Library) on GitHub
     - [Guide](https://learn.adafruit.com/esp32-s3-reverse-tft-feather)
     - [Store Page](https://www.adafruit.com/product/5691)
+- Adafruit RA8875
+    - [Guide](https://learn.adafruit.com/ra8875-touch-display-driver-board/arduino)
 - Arduino
     - [Arduino IDEv2](https://github.com/arduino/arduino-ide)
     - [ESP32 Core](https://github.com/arduino/arduino-esp32)
