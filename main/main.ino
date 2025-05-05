@@ -101,10 +101,10 @@ void setup(void) {
 
     const unsigned long BOOT_DELAY = millis() + 32;
     while (millis() < BOOT_DELAY) {
-        if (swOnboardAdd->isPressed()) {
+        if (swOnboardAdd->isPressed() || swFailAdd->isPressed()) {
             deviceMode = INTAKE_MODE;
             break;
-        } else if (swOnboardSub->isPressed()) {
+        } else if (swOnboardSub->isPressed() || swFailSub->isPressed()) {
             deviceMode = OUTPUT_MODE;
             break;
         }
@@ -124,7 +124,7 @@ void setup(void) {
     display.fillScreen(ST77XX_BLACK);
 
     // wait for button release after mode switch
-    if (!(swOnboardAdd->isReleased() && swOnboardSub->isReleased())) {
+    if (!(swOnboardAdd->isReleased() && swOnboardSub->isReleased() && swFailAdd->isReleased() && swFailSub->isReleased())) {
         display.setTextColor(ST77XX_GREEN);
         display.setTextSize(3);
         display.setCursor(10, 0);
@@ -140,7 +140,7 @@ void setup(void) {
         display.setCursor(80, 110);
         display.setTextColor(ST77XX_RED);
         display.print(F("Let go..."));
-        while (!(swOnboardAdd->isReleased() && swOnboardSub->isReleased())) {
+        while (!(swOnboardAdd->isReleased() && swOnboardSub->isReleased() && swFailAdd->isReleased() && swFailSub->isReleased())) {
             delayMicroseconds(1000);
         }
         display.fillScreen(ST77XX_BLACK);
